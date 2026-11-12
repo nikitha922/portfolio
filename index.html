@@ -13,10 +13,10 @@
             try {
                 var root = document.documentElement;
                 var theme = localStorage.getItem('theme');
-                if (theme === 'light') root.setAttribute('data-theme', 'light');
+                if (theme === 'dark') root.setAttribute('data-theme', 'dark');
                 var tokens = JSON.parse(localStorage.getItem('tokens') || 'null');
                 if (tokens) {
-                    if (tokens.accent) root.style.setProperty('--accent', tokens.accent);
+                    if (tokens.accent && tokens.accent !== '#7c5cff') root.style.setProperty('--accent', tokens.accent);
                     if (tokens.radius != null) root.style.setProperty('--radius', tokens.radius + 'px');
                     if (tokens.motion === false) root.setAttribute('data-motion', 'off');
                 }
@@ -25,36 +25,37 @@
     </script>
     <style>
         :root {
-            --accent: #7c5cff;
-            --accent-2: #22d3ee;
+            --accent: #f43f5e;
+            --accent-2: #f59e0b;
+            --on-accent: #ffffff;
             --radius: 18px;
-            --bg: #07070d;
-            --bg-2: #0d0d17;
-            --surface: rgba(255, 255, 255, 0.04);
-            --surface-solid: #11111c;
-            --border: rgba(255, 255, 255, 0.09);
-            --text: #ececf3;
-            --muted: #9b9bb2;
-            --platform: #1a1a2b;
-            --block: #26263b;
-            --tower: #2f2f4a;
+            --bg: #f7f6f2;
+            --bg-2: #efeee8;
+            --surface: rgba(255, 255, 255, 0.72);
+            --surface-solid: #ffffff;
+            --border: rgba(20, 20, 30, 0.1);
+            --text: #17171c;
+            --muted: #5d5d66;
+            --platform: #e1ddd0;
+            --block: #cfcabb;
+            --tower: #ffffff;
             --font-display: 'Space Grotesk', system-ui, sans-serif;
             --font-body: 'Inter', system-ui, sans-serif;
             --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-            color-scheme: dark;
-        }
-        [data-theme="light"] {
-            --bg: #f5f4fb;
-            --bg-2: #ecebf6;
-            --surface: rgba(255, 255, 255, 0.7);
-            --surface-solid: #ffffff;
-            --border: rgba(20, 20, 40, 0.1);
-            --text: #15151f;
-            --muted: #5c5c73;
-            --platform: #e4e2f3;
-            --block: #d3d0ea;
-            --tower: #ffffff;
             color-scheme: light;
+        }
+        [data-theme="dark"] {
+            --bg: #0b0d0e;
+            --bg-2: #111415;
+            --surface: rgba(255, 255, 255, 0.04);
+            --surface-solid: #14171a;
+            --border: rgba(255, 255, 255, 0.09);
+            --text: #ececf0;
+            --muted: #9a9fa6;
+            --platform: #1d2124;
+            --block: #2a3033;
+            --tower: #384045;
+            color-scheme: dark;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
@@ -96,7 +97,7 @@
         .logo { font-family: var(--font-mono); font-weight: 500; display: flex; align-items: center; gap: .5rem; }
         .logo-mark {
             display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
-            background: var(--accent); color: #fff; font-size: .8rem; font-weight: 600;
+            background: var(--accent); color: var(--on-accent); font-size: .8rem; font-weight: 600;
             box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 60%, transparent);
         }
         .nav-links { display: flex; gap: 1.6rem; font-size: .92rem; color: var(--muted); }
@@ -112,9 +113,9 @@
         .kbd-btn:hover, .icon-btn:hover { color: var(--text); border-color: var(--accent); }
         kbd { white-space: nowrap; font-family: var(--font-mono); font-size: .72rem; padding: .1rem .35rem; border-radius: 5px; border: 1px solid var(--border); }
         .icon { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .sun { display: none; }
-        [data-theme="light"] .sun { display: block; }
-        [data-theme="light"] .moon { display: none; }
+        .moon { display: none; }
+        [data-theme="dark"] .moon { display: block; }
+        [data-theme="dark"] .sun { display: none; }
 
         /* Hero */
         .hero { min-height: 100vh; padding: 7.5rem 0 3rem; display: flex; align-items: center; }
@@ -144,7 +145,7 @@
             border: 1px solid var(--border); background: var(--surface); transition: transform .2s, border-color .2s, box-shadow .2s;
         }
         .btn:hover { transform: translateY(-2px); border-color: var(--accent); }
-        .btn-primary { background: var(--accent); border-color: transparent; color: #fff; box-shadow: 0 10px 30px -10px var(--accent); }
+        .btn-primary { background: var(--accent); border-color: transparent; color: var(--on-accent); box-shadow: 0 10px 30px -10px var(--accent); }
         .hint { margin-top: 1.6rem; font-size: .82rem; color: var(--muted); display: flex; align-items: center; gap: .5rem; }
         .hint::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
 
@@ -166,7 +167,7 @@
         }
         .hotspot.ready { opacity: 1; }
         .hotspot:hover, .hotspot.active { border-color: var(--accent); }
-        .hotspot .dot { width: 18px; height: 18px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; color: #fff; font-size: .62rem; }
+        .hotspot .dot { width: 18px; height: 18px; border-radius: 50%; background: var(--brand, var(--accent)); display: grid; place-items: center; color: #fff; font-size: .62rem; }
         .hotspot .yr { color: var(--muted); font-weight: 500; font-family: var(--font-mono); }
 
         /* Sections */
@@ -217,7 +218,7 @@
             padding: .45rem .95rem; border-radius: 999px; font-size: .85rem;
             border: 1px solid var(--border); background: var(--surface); color: var(--muted);
         }
-        .filter[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: transparent; }
+        .filter[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: transparent; }
         .skill-cloud { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.6rem; }
         .skill {
             display: inline-flex; align-items: center; gap: .55rem;
@@ -249,6 +250,58 @@
         .field { flex: 1; min-width: 140px; padding: .65rem .9rem; border-radius: calc(var(--radius) * .6); border: 1px solid var(--border); background: var(--bg); color: var(--text); font: inherit; }
         .tokens { font-family: var(--font-mono); font-size: .82rem; padding: 1rem 1.2rem; border-radius: var(--radius); background: var(--bg-2); border: 1px solid var(--border); color: var(--muted); white-space: pre; overflow-x: auto; }
         .tokens b { color: var(--accent); font-weight: 500; }
+
+
+        /* Personal projects */
+        .projects { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; }
+        .project { display: flex; flex-direction: column; overflow: hidden; transition: transform .3s, border-color .3s, box-shadow .3s; }
+        .project:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 24px 50px -24px color-mix(in srgb, var(--accent) 60%, transparent); }
+        .project-art { position: relative; height: 190px; overflow: hidden; border-bottom: 1px solid var(--border); display: grid; place-items: center; }
+        .project-body { display: flex; flex-direction: column; gap: .8rem; flex: 1; padding: 1.4rem 1.5rem 1.5rem; }
+        .project h3 { font-family: var(--font-display); font-size: 1.3rem; }
+        .project p { color: var(--muted); font-size: .94rem; }
+        .project-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: auto; padding-top: .4rem; }
+        .project-tags span { padding: .15rem .6rem; border-radius: 999px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: .72rem; color: var(--muted); }
+        .project-links { display: flex; flex-wrap: wrap; gap: .6rem; }
+        .project-links .btn { padding: .55rem 1rem; font-size: .85rem; }
+
+        /* Taskly preview */
+        .art-taskly { background: #f1ede3; }
+        .art-taskly .list { width: 72%; display: grid; gap: .55rem; }
+        .art-taskly .row { display: flex; align-items: center; gap: .6rem; padding: .55rem .7rem; border-radius: 10px; background: #fbf9f4; border: 1px solid #ddd7c8; transition: transform .3s; }
+        .art-taskly .row i { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #c4bca8; flex: none; }
+        .art-taskly .row.done i { background: #d4411e; border-color: #d4411e; }
+        .art-taskly .row b { display: block; height: 7px; border-radius: 4px; background: #d9d3c2; }
+        .art-taskly .row.done b { background: #e8e3d5; }
+        .project:hover .art-taskly .row:nth-child(2) { transform: translateX(8px); }
+        .project:hover .art-taskly .row:nth-child(3) { transform: translateX(16px); }
+
+        /* Money Trail preview */
+        .art-money { background: #eef0ec; }
+        .art-money svg { width: 82%; height: auto; overflow: visible; }
+        .art-money .draw { stroke-dasharray: 420; stroke-dashoffset: 0; transition: stroke-dashoffset 1.2s ease; }
+        .project:hover .art-money .draw { animation: draw 1.2s ease; }
+        @keyframes draw { from { stroke-dashoffset: 420; } to { stroke-dashoffset: 0; } }
+
+        /* Catch Me preview */
+        .art-catch { background: #0e1013; }
+        .art-catch::before { content: ''; position: absolute; inset: 0; background: radial-gradient(18rem 10rem at 85% 100%, rgba(255,107,107,.25), transparent 70%), radial-gradient(16rem 9rem at 10% 0%, rgba(70,227,255,.14), transparent 70%); }
+        .cm-pill { position: relative; display: flex; align-items: center; gap: .55rem; height: 46px; padding: 0 1.1rem 0 .8rem; border-radius: 999px; background: linear-gradient(135deg, #ff6b6b, #ffb347); color: #2a1204; font-weight: 800; font-size: .95rem; box-shadow: 0 10px 28px -8px rgba(255,107,107,.8); transition: transform .22s cubic-bezier(.3,1.6,.5,1), opacity .12s; }
+        .cm-eyes { display: flex; gap: 4px; }
+        .cm-eye { position: relative; width: 15px; height: 15px; border-radius: 50%; background: #fff; overflow: hidden; }
+        .cm-eye i { position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; background: #1a1410; }
+        .project:hover .cm-pill { animation: dodge 2.4s ease-in-out infinite; }
+        @keyframes dodge {
+            0%, 100% { transform: translate(0, 0); }
+            12% { opacity: 0; transform: translate(0, 0) scale(.4) rotate(-12deg); }
+            18% { opacity: 0; transform: translate(70px, -34px) scale(.4); }
+            26% { opacity: 1; transform: translate(70px, -34px) scale(1); }
+            50% { opacity: 1; transform: translate(70px, -34px); }
+            56% { opacity: 0; transform: translate(70px, -34px) scale(.4) rotate(-12deg); }
+            62% { opacity: 0; transform: translate(-72px, 30px) scale(.4); }
+            70% { opacity: 1; transform: translate(-72px, 30px) scale(1); }
+            90% { opacity: 1; transform: translate(-72px, 30px); }
+        }
 
         /* Contact terminal */
         .terminal { overflow: hidden; }
@@ -282,7 +335,7 @@
 
         .toast {
             position: fixed; bottom: 1.5rem; left: 50%; transform: translate(-50%, 150%);
-            padding: .7rem 1.1rem; border-radius: 999px; background: var(--accent); color: #fff; font-size: .88rem; font-weight: 600;
+            padding: .7rem 1.1rem; border-radius: 999px; background: var(--accent); color: var(--on-accent); font-size: .88rem; font-weight: 600;
             transition: transform .35s ease, opacity .35s ease; z-index: 100; opacity: 0; pointer-events: none;
         }
         .toast.show { transform: translate(-50%, 0); opacity: 1; }
@@ -292,6 +345,7 @@
         .reveal.in { opacity: 1; transform: none; }
         [data-motion="off"] *, [data-motion="off"] *::before { animation: none !important; transition: none !important; }
         [data-motion="off"] .reveal { opacity: 1; transform: none; }
+        [data-motion="off"] .project:hover .cm-pill, [data-motion="off"] .project:hover .art-money .draw { animation: none !important; }
         @media (prefers-reduced-motion: reduce) {
             html { scroll-behavior: auto; }
             .reveal { opacity: 1; transform: none; }
@@ -301,6 +355,7 @@
             .hero-grid, .play, .contact-grid { grid-template-columns: minmax(0, 1fr); }
             .stage { height: 420px; }
             .stats { grid-template-columns: repeat(2, 1fr); }
+            .projects { grid-template-columns: minmax(0, 1fr); }
             .nav-links { display: none; }
         }
         @media (max-width: 520px) {
@@ -322,6 +377,7 @@
             <a href="#about">About</a>
             <a href="#experience">Journey</a>
             <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
             <a href="#playground">Playground</a>
             <a href="#contact">Contact</a>
         </div>
@@ -341,7 +397,7 @@
         <section class="hero" id="about">
             <div class="container hero-grid">
                 <div>
-                    <span class="eyebrow"><span class="pulse"></span>Senior Frontend Engineer · 7+ years</span>
+                    <span class="eyebrow"><span class="pulse"></span>Senior Frontend Engineer · 8.5 years</span>
                     <h1>Nikitha<br>Madishetty</h1>
                     <h2>Building scalable frontend architectures for <span class="typing" id="typingText">React &amp; Next.js Apps</span><span class="caret" aria-hidden="true"></span></h2>
                     <p class="lead">Ex-<strong>Wells Fargo</strong>, <strong>Amazon</strong>, and <strong>Google</strong> engineer specializing in design systems, micro-frontends, high-performance UI optimization, and LLM-powered interfaces. Based in Santa Clara, CA.</p>
@@ -349,17 +405,17 @@
                         <a href="#experience" class="btn btn-primary">Explore my journey &rarr;</a>
                         <a href="#contact" class="btn">Get in touch</a>
                     </div>
-                    <p class="hint">Drag the skyline, or click a tower to open that chapter.</p>
+                    <p class="hint">Drag to rotate the map, or click a building to open that chapter.</p>
                 </div>
-                <div class="stage" id="stage" aria-label="Interactive 3D skyline of career milestones">
-                    <div class="stage-fallback">Interactive skyline needs WebGL.<br>Scroll down for the full journey.</div>
+                <div class="stage" id="stage" aria-label="Interactive 3D map of the offices I have worked in, joined by a path">
+                    <div class="stage-fallback">Interactive office map needs WebGL.<br>Scroll down for the full journey.</div>
                 </div>
             </div>
         </section>
 
         <section class="block" aria-label="Highlights">
             <div class="container stats">
-                <div class="card stat reveal"><b>7+</b><span>years shipping production UI</span></div>
+                <div class="card stat reveal"><b>8.5</b><span>years shipping production UI</span></div>
                 <div class="card stat reveal"><b>3</b><span>companies: Google, Amazon, Wells Fargo</span></div>
                 <div class="card stat reveal"><b>60%</b><span>faster page loads delivered at Google</span></div>
                 <div class="card stat reveal"><b>0&rarr;1</b><span>React apps for Ring hardware</span></div>
@@ -373,7 +429,7 @@
                         <div class="tag">$ git log --career</div>
                         <h2>The journey so far</h2>
                     </div>
-                    <p>Each role is a commit, with HEAD at the latest. These are the same towers you saw in the skyline.</p>
+                    <p>Each role is a commit, with HEAD at the latest. These are the same offices you saw on the map.</p>
                 </div>
                 <div class="gitlog">
                     <article class="commit head reveal" id="role-wellsfargo">
@@ -456,6 +512,80 @@
             </div>
         </section>
 
+        <section class="block" id="projects">
+            <div class="container">
+                <div class="section-head reveal">
+                    <div>
+                        <div class="tag">$ ls ~/personal-projects</div>
+                        <h2>Personal projects</h2>
+                    </div>
+                    <p>Things I build on my own time to try ideas out: a to-do app, a finance dashboard and a button that refuses to be clicked.</p>
+                </div>
+                <div class="projects">
+                    <article class="card project reveal" id="project-taskly">
+                        <div class="project-art art-taskly" aria-hidden="true">
+                            <div class="list">
+                                <div class="row done"><i></i><b style="width:62%"></b></div>
+                                <div class="row"><i></i><b style="width:80%"></b></div>
+                                <div class="row"><i></i><b style="width:48%"></b></div>
+                            </div>
+                        </div>
+                        <div class="project-body">
+                            <h3>Taskly</h3>
+                            <p>A keyboard-friendly to-do app with due dates, categories, undo and dark mode. A live Chart.js panel shows what is due and how the work splits up.</p>
+                            <div class="project-tags"><span>React</span><span>TypeScript</span><span>Chart.js</span><span>Vite</span></div>
+                            <div class="project-links">
+                                <a class="btn btn-primary" href="https://nikitha922.github.io/todo-app/" target="_blank" rel="noopener noreferrer">Live demo ↗</a>
+                                <a class="btn" href="https://github.com/nikitha922/todo-app" target="_blank" rel="noopener noreferrer">Source ↗</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card project reveal" id="project-money-trail">
+                        <div class="project-art art-money" aria-hidden="true">
+                            <svg viewBox="0 0 240 120">
+                                <defs>
+                                    <linearGradient id="mtFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8cc63f" stop-opacity=".55"/><stop offset="1" stop-color="#8cc63f" stop-opacity="0"/></linearGradient>
+                                </defs>
+                                <g stroke="#14171a" stroke-opacity=".07"><path d="M0 30h240M0 60h240M0 90h240"/></g>
+                                <path d="M0 96 C30 90 40 84 60 78 S95 70 115 56 S160 52 180 34 S220 22 240 14 V120 H0Z" fill="url(#mtFill)"/>
+                                <path class="draw" d="M0 96 C30 90 40 84 60 78 S95 70 115 56 S160 52 180 34 S220 22 240 14" fill="none" stroke="#6fae2b" stroke-width="3" stroke-linecap="round"/>
+                                <g fill="#f4a259"><rect x="20" y="84" width="10" height="28" rx="3"/><rect x="74" y="72" width="10" height="40" rx="3"/><rect x="128" y="78" width="10" height="34" rx="3"/><rect x="182" y="64" width="10" height="48" rx="3"/></g>
+                                <circle cx="240" cy="14" r="5" fill="#6fae2b" stroke="#fff" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="project-body">
+                            <h3>Money Trail</h3>
+                            <p>A Copilot-style finance dashboard: net worth, cash flow, budgets, goals and a searchable transaction feed, with interactive charts and date ranges.</p>
+                            <div class="project-tags"><span>Vue 3</span><span>TypeScript</span><span>Chart.js</span><span>Vite</span></div>
+                            <div class="project-links">
+                                <a class="btn btn-primary" href="https://nikitha922.github.io/money-trail/" target="_blank" rel="noopener noreferrer">Live demo ↗</a>
+                                <a class="btn" href="https://github.com/nikitha922/money-trail" target="_blank" rel="noopener noreferrer">Source ↗</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card project reveal" id="project-catch-me">
+                        <div class="project-art art-catch" aria-hidden="true">
+                            <div class="cm-pill">
+                                <span class="cm-eyes"><span class="cm-eye"><i></i></span><span class="cm-eye"><i></i></span></span>
+                                Catch me
+                            </div>
+                        </div>
+                        <div class="project-body">
+                            <h3>Catch Me</h3>
+                            <p>A button that vanishes the moment you get close. It notices dev tools, and it is drawn on a canvas so there is nothing to inspect. Hover the card to watch it dodge.</p>
+                            <div class="project-tags"><span>TypeScript</span><span>Canvas 2D</span><span>Vite</span></div>
+                            <div class="project-links">
+                                <a class="btn btn-primary" href="https://nikitha922.github.io/catch-me/" target="_blank" rel="noopener noreferrer">Try it ↗</a>
+                                <a class="btn" href="https://github.com/nikitha922/catch-me" target="_blank" rel="noopener noreferrer">Source ↗</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
         <section class="block" id="playground">
             <div class="container">
                 <div class="section-head reveal">
@@ -463,7 +593,7 @@
                         <div class="tag">// design-tokens.css</div>
                         <h2>Restyle this site</h2>
                     </div>
-                    <p>I build design systems, and this page runs on a small one. Change the tokens and the whole site updates, including the 3D skyline.</p>
+                    <p>I build design systems, and this page runs on a small one. Change the tokens and the whole site updates, including the 3D office map.</p>
                 </div>
                 <div class="play">
                     <div class="card controls reveal">
@@ -552,12 +682,12 @@
             window.__toast = toast;
 
             // Theme
-            function setTheme(light) {
-                if (light) root.setAttribute('data-theme', 'light'); else root.removeAttribute('data-theme');
-                store.set('theme', light ? 'light' : 'dark');
+            function setTheme(dark) {
+                if (dark) root.setAttribute('data-theme', 'dark'); else root.removeAttribute('data-theme');
+                store.set('theme', dark ? 'dark' : 'light');
                 window.dispatchEvent(new Event('tokenschange'));
             }
-            function toggleTheme() { setTheme(root.getAttribute('data-theme') !== 'light'); }
+            function toggleTheme() { setTheme(root.getAttribute('data-theme') !== 'dark'); }
             document.getElementById('themeToggle').addEventListener('click', toggleTheme);
 
             // Typing effect
@@ -592,10 +722,16 @@
             });
 
             // Design tokens playground
-            var DEFAULTS = { accent: '#7c5cff', radius: 18, motion: true };
-            var COLORS = ['#7c5cff', '#22d3ee', '#10b981', '#f59e0b', '#f43f5e', '#3b82f6'];
+            var DEFAULTS = { accent: '#f43f5e', radius: 18, motion: true };
+            var COLORS = ['#f43f5e', '#f59e0b', '#10b981', '#0ea5e9', '#14b8a6', '#3b82f6'];
             var tokens = Object.assign({}, DEFAULTS);
             try { Object.assign(tokens, JSON.parse(store.get('tokens') || '{}')); } catch (e) {}
+            if (tokens.accent === '#7c5cff') tokens.accent = DEFAULTS.accent; // retired purple default
+            // Pick white or near-black text for whichever accent is chosen.
+            function onAccent(hex) {
+                var n = parseInt(hex.slice(1), 16), r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+                return (0.299 * r + 0.587 * g + 0.114 * b) > 170 ? '#17171c' : '#ffffff';
+            }
             var swatches = document.getElementById('swatches');
             COLORS.forEach(function (c) {
                 var b = document.createElement('button');
@@ -611,6 +747,7 @@
             document.getElementById('resetTokens').addEventListener('click', function () { tokens = Object.assign({}, DEFAULTS); applyTokens(); toast('Tokens reset'); });
             function applyTokens() {
                 root.style.setProperty('--accent', tokens.accent);
+                root.style.setProperty('--on-accent', onAccent(tokens.accent));
                 root.style.setProperty('--radius', tokens.radius + 'px');
                 if (tokens.motion) root.removeAttribute('data-motion'); else root.setAttribute('data-motion', 'off');
                 radius.value = tokens.radius; motion.checked = tokens.motion;
@@ -666,11 +803,15 @@
                 { label: 'Go to About', hint: 'section', run: go('#about') },
                 { label: 'Go to Journey', hint: 'section', run: go('#experience') },
                 { label: 'Go to Skills', hint: 'section', run: go('#skills') },
+                { label: 'Go to Projects', hint: 'section', run: go('#projects') },
                 { label: 'Go to Playground', hint: 'section', run: go('#playground') },
                 { label: 'Go to Contact', hint: 'section', run: go('#contact') },
                 { label: 'Open Wells Fargo chapter', hint: '2023 – now', run: function () { openRole('role-wellsfargo'); } },
                 { label: 'Open Amazon (Ring) chapter', hint: '2020 – 22', run: function () { openRole('role-amazon'); } },
                 { label: 'Open Google chapter', hint: '2018 – 20', run: function () { openRole('role-google'); } },
+                { label: 'Open Taskly (to-do app)', hint: 'project ↗', run: function () { window.open('https://nikitha922.github.io/todo-app/', '_blank', 'noopener'); } },
+                { label: 'Open Money Trail (finance dashboard)', hint: 'project ↗', run: function () { window.open('https://nikitha922.github.io/money-trail/', '_blank', 'noopener'); } },
+                { label: 'Open Catch Me (the button game)', hint: 'project ↗', run: function () { window.open('https://nikitha922.github.io/catch-me/', '_blank', 'noopener'); } },
                 { label: 'Toggle light / dark theme', hint: 'action', run: toggleTheme },
                 { label: 'Copy email address', hint: 'action', run: copyEmail },
                 { label: 'Open LinkedIn', hint: 'link ↗', run: function () { window.open('https://www.linkedin.com/in/nikitha-madishetty', '_blank', 'noopener'); } },
@@ -742,9 +883,9 @@
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 200);
-        const CAM_RADIUS = 26, CAM_HEIGHT = 15;
+        const CAM_RADIUS = 27, CAM_HEIGHT = 16;
 
-        scene.add(new THREE.HemisphereLight(0xffffff, 0x444466, 1.1));
+        scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8a8a, 1.15));
         const sun = new THREE.DirectionalLight(0xffffff, 1.6);
         sun.position.set(8, 16, 6);
         sun.castShadow = true;
@@ -756,112 +897,243 @@
         scene.add(world);
 
         const platformMat = new THREE.MeshStandardMaterial({ roughness: 0.85 });
-        const platform = new THREE.Mesh(new RoundedBoxGeometry(12, 0.8, 12, 4, 0.35), platformMat);
+        const platform = new THREE.Mesh(new RoundedBoxGeometry(13, 0.8, 13, 4, 0.35), platformMat);
         platform.position.y = -0.4;
         platform.receiveShadow = true;
         world.add(platform);
 
-        // Deterministic little city blocks
-        let seed = 7;
-        const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-        const blockMat = new THREE.MeshStandardMaterial({ roughness: 0.7 });
-        const blockGeo = new RoundedBoxGeometry(1, 1, 1, 2, 0.12);
-        for (let x = -5; x <= 5; x += 1.25) {
-            for (let z = -5; z <= 5; z += 1.25) {
-                if (Math.abs(x - z) < 2.6 || rand() > 0.55) continue;
-                const h = 0.3 + rand() * 1.2;
-                const b = new THREE.Mesh(blockGeo, blockMat);
-                b.scale.set(0.8, h, 0.8);
-                b.position.set(x, h / 2, z);
-                b.castShadow = b.receiveShadow = true;
-                world.add(b);
+        // ---- Offices -------------------------------------------------------------
+        // Three equal-height offices (two floors each), one per employer, each with its own
+        // footprint, its company's colours and a wordmark sign. Footprints are lists of
+        // rectangles {x, z, w, d}.
+        const FLOOR = 1.1, FLOORS = 2;
+        const roles = [
+            {   // L-shaped
+                id: 'role-google', name: 'Google', year: '2018', pos: [-3.6, -3.0], brand: '#4285F4',
+                parts: [{ x: 0, z: 0, w: 3.4, d: 1.5 }, { x: -0.95, z: 1.45, w: 1.5, d: 1.4 }],
+                roofs: ['#4285F4', '#EA4335'], bands: ['#FBBC05', '#34A853'],
+                sign: { part: 1, w: 1.4, h: 0.5, draw: 'google' }
+            },
+            {   // T-shaped
+                id: 'role-amazon', name: 'Amazon', year: '2020', pos: [0.2, -0.4], brand: '#FF9900',
+                parts: [{ x: 0, z: -0.9, w: 3.4, d: 1.4 }, { x: 0, z: 0.5, w: 1.4, d: 1.8 }],
+                roofs: ['#FF9900', '#FF9900'], bands: ['#232F3E', '#232F3E'],
+                sign: { part: 1, w: 1.3, h: 0.5, draw: 'amazon' }
+            },
+            {   // U-shaped around a courtyard
+                id: 'role-wellsfargo', name: 'Wells Fargo', year: '2023', pos: [3.5, 2.6], brand: '#D71E28',
+                parts: [{ x: -1.35, z: 0, w: 1.3, d: 3 }, { x: 1.35, z: 0, w: 1.3, d: 3 }, { x: 0, z: -1.0, w: 1.4, d: 1 }],
+                roofs: ['#D71E28', '#D71E28', '#D71E28'], bands: ['#FFCD41', '#FFCD41'],
+                sign: { part: 0, w: 1.1, h: 0.7, draw: 'wellsfargo' }
             }
+        ];
+
+        // Wordmarks, drawn to a canvas in each company's style.
+        const SANS = "'Helvetica Neue', Helvetica, Arial, sans-serif";
+        const signDraw = {
+            google(ctx, w, h) {
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);
+                ctx.font = `700 ${h * 0.62}px ${SANS}`; ctx.textBaseline = 'middle';
+                const letters = [['G', '#4285F4'], ['o', '#EA4335'], ['o', '#FBBC05'], ['g', '#4285F4'], ['l', '#34A853'], ['e', '#EA4335']];
+                const total = letters.reduce((n, [l]) => n + ctx.measureText(l).width, 0);
+                let x = (w - total) / 2;
+                letters.forEach(([l, c]) => { ctx.fillStyle = c; ctx.fillText(l, x, h * 0.54); x += ctx.measureText(l).width; });
+            },
+            amazon(ctx, w, h) {
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);
+                ctx.font = `700 ${h * 0.56}px ${SANS}`; ctx.textBaseline = 'middle'; ctx.fillStyle = '#232F3E';
+                const tw = ctx.measureText('amazon').width, x0 = (w - tw) / 2;
+                ctx.fillText('amazon', x0, h * 0.42);
+                // The smile: an orange arc from "a" to "z", with an arrowhead.
+                ctx.strokeStyle = '#FF9900'; ctx.lineWidth = h * 0.065; ctx.lineCap = 'round';
+                ctx.beginPath(); ctx.moveTo(x0 + tw * 0.08, h * 0.78); ctx.quadraticCurveTo(x0 + tw * 0.5, h * 1.0, x0 + tw * 0.86, h * 0.72); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(x0 + tw * 0.86, h * 0.72); ctx.lineTo(x0 + tw * 0.8, h * 0.64); ctx.moveTo(x0 + tw * 0.86, h * 0.72); ctx.lineTo(x0 + tw * 0.93, h * 0.66); ctx.stroke();
+            },
+            wellsfargo(ctx, w, h) {
+                ctx.fillStyle = '#D71E28'; ctx.fillRect(0, 0, w, h);
+                ctx.fillStyle = '#FFCD41'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.font = `800 ${h * 0.3}px Georgia, 'Times New Roman', serif`;
+                ctx.fillText('WELLS', w / 2, h * 0.33);
+                ctx.fillText('FARGO', w / 2, h * 0.68);
+            }
+        };
+        function makeSign(kind, wUnits, hUnits) {
+            const c = document.createElement('canvas');
+            c.width = 1024; c.height = Math.round(1024 * hUnits / wUnits);
+            signDraw[kind](c.getContext('2d'), c.width, c.height);
+            const tex = new THREE.CanvasTexture(c);
+            tex.colorSpace = THREE.SRGBColorSpace;
+            tex.anisotropy = 4;
+            return tex;
         }
 
-        // Career towers along a diagonal "timeline street"
-        const roles = [
-            { id: 'role-google', name: 'Google', year: '2018', h: 2.8, pos: [-3.6, -3.6] },
-            { id: 'role-amazon', name: 'Amazon', year: '2020', h: 4.4, pos: [0, 0] },
-            { id: 'role-wellsfargo', name: 'Wells Fargo', year: '2023', h: 6.2, pos: [3.6, 3.6] }
-        ];
-        const towerMat = new THREE.MeshStandardMaterial({ roughness: 0.4, metalness: 0.1 });
-        const glowMat = new THREE.MeshStandardMaterial({ emissiveIntensity: 1.4, roughness: 0.3 });
-        const windowMat = new THREE.MeshStandardMaterial({ emissiveIntensity: 0.35, roughness: 0.5, transparent: true, opacity: 0.85 });
+        const plotMat = new THREE.MeshStandardMaterial({ roughness: 0.9 });
+        const towerMat = new THREE.MeshStandardMaterial({ roughness: 0.45, metalness: 0.05 });
+        const glowMat = new THREE.MeshStandardMaterial({ emissiveIntensity: 1.1, roughness: 0.35 });
+        const colorMats = {};
+        const brandMat = (hex, glow) => colorMats[hex + glow] || (colorMats[hex + glow] = new THREE.MeshStandardMaterial({
+            color: hex, emissive: hex, emissiveIntensity: glow, roughness: 0.4
+        }));
         const pickables = [];
+        const H = FLOORS * FLOOR;
+
         roles.forEach((r) => {
             const g = new THREE.Group();
             g.position.set(r.pos[0], 0, r.pos[1]);
-            const body = new THREE.Mesh(new RoundedBoxGeometry(1.6, r.h, 1.6, 3, 0.18), towerMat);
-            body.position.y = r.h / 2;
-            body.castShadow = body.receiveShadow = true;
-            body.userData.role = r;
-            g.add(body);
-            for (let y = 0.7; y < r.h - 0.4; y += 0.75) {
-                const stripe = new THREE.Mesh(new THREE.BoxGeometry(1.63, 0.05, 1.63), windowMat);
-                stripe.position.y = y;
-                g.add(stripe);
-            }
-            const cap = new THREE.Mesh(new RoundedBoxGeometry(1.7, 0.22, 1.7, 2, 0.08), glowMat);
-            cap.position.y = r.h + 0.11;
-            cap.userData.role = r;
-            g.add(cap);
-            pickables.push(body, cap);
+
+            // Plot: a slightly raised pad that follows the footprint's bounding box.
+            const minX = Math.min(...r.parts.map((p) => p.x - p.w / 2)), maxX = Math.max(...r.parts.map((p) => p.x + p.w / 2));
+            const minZ = Math.min(...r.parts.map((p) => p.z - p.d / 2)), maxZ = Math.max(...r.parts.map((p) => p.z + p.d / 2));
+            r.bounds = { x0: r.pos[0] + minX - 0.9, x1: r.pos[0] + maxX + 0.9, z0: r.pos[1] + minZ - 0.9, z1: r.pos[1] + maxZ + 0.9 };
+            const plot = new THREE.Mesh(new RoundedBoxGeometry(maxX - minX + 1.1, 0.14, maxZ - minZ + 1.1, 3, 0.07), plotMat);
+            plot.position.set((minX + maxX) / 2, 0.07, (minZ + maxZ) / 2);
+            plot.receiveShadow = true;
+            g.add(plot);
+
+            r.parts.forEach((p, i) => {
+                const body = new THREE.Mesh(new RoundedBoxGeometry(p.w, H, p.d, 3, 0.1), towerMat);
+                body.position.set(p.x, 0.14 + H / 2, p.z);
+                body.castShadow = body.receiveShadow = true;
+                body.userData.role = r;
+                g.add(body);
+
+                // One band of windows per floor, in the company's colours.
+                for (let f = 0; f < FLOORS; f++) {
+                    const band = new THREE.Mesh(new THREE.BoxGeometry(p.w + 0.03, 0.34, p.d + 0.03), brandMat(r.bands[f % r.bands.length], 0.35));
+                    band.position.set(p.x, 0.14 + (f + 0.55) * FLOOR, p.z);
+                    g.add(band);
+                }
+
+                const roof = new THREE.Mesh(new RoundedBoxGeometry(p.w + 0.12, 0.14, p.d + 0.12, 2, 0.05), brandMat(r.roofs[i % r.roofs.length], 0.3));
+                roof.position.set(p.x, 0.14 + H + 0.07, p.z);
+                roof.userData.role = r;
+                g.add(roof);
+                pickables.push(body, roof);
+            });
+
+            // Wordmark sign on the top floor.
+            const sp = r.parts[r.sign.part];
+            const sign = new THREE.Mesh(
+                new THREE.PlaneGeometry(r.sign.w, r.sign.h),
+                new THREE.MeshBasicMaterial({ map: makeSign(r.sign.draw, r.sign.w, r.sign.h), toneMapped: false })
+            );
+            sign.position.set(sp.x, 0.14 + (FLOORS - 1 + 0.62) * FLOOR, sp.z + sp.d / 2 + 0.035);
+            sign.userData.role = r;
+            g.add(sign);
+            pickables.push(sign);
+
             r.group = g;
-            r.top = new THREE.Vector3(r.pos[0], r.h + 0.9, r.pos[1]);
+            r.top = new THREE.Vector3(r.pos[0] + (minX + maxX) / 2, H + 0.9, r.pos[1] + (minZ + maxZ) / 2);
             world.add(g);
         });
 
-        // Glowing path that links the chapters
-        const curve = new THREE.CatmullRomCurve3([
-            new THREE.Vector3(-5.4, 0.12, -4.6),
-            new THREE.Vector3(-3.6, 0.12, -2.2),
-            new THREE.Vector3(-1.4, 0.12, -1.0),
-            new THREE.Vector3(1.4, 0.12, 1.0),
-            new THREE.Vector3(3.6, 0.12, 2.2),
-            new THREE.Vector3(5.2, 0.12, 4.8)
-        ]);
-        const pathMat = new THREE.MeshStandardMaterial({ emissiveIntensity: 1.2, roughness: 0.4 });
-        world.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 120, 0.07, 8, false), pathMat));
+        // ---- The path: Google -> Amazon -> Wells Fargo -------------------------------
+        const PATH_Y = 0.2;
+        const pathPoints = [
+            [-4.55, -0.5], [-3.5, 0.7], [-1.7, 1.25], [0.2, 1.6],      // Google's door to Amazon's
+            [0.5, 3.2], [1.0, 4.8], [2.4, 5.0], [3.5, 4.7], [3.5, 3.3]  // Amazon's door round to Wells Fargo's courtyard
+        ].map(([x, z]) => new THREE.Vector3(x, PATH_Y, z));
+        const curve = new THREE.CatmullRomCurve3(pathPoints, false, 'catmullrom', 0.4);
+        const TUBULAR = 220, RADIAL = 8;
+        const pathGeo = new THREE.TubeGeometry(curve, TUBULAR, 0.075, RADIAL, false);
+        const pathIndexCount = pathGeo.index.count;
+        const pathMat = new THREE.MeshStandardMaterial({ emissiveIntensity: 1.0, roughness: 0.4 });
+        const pathMesh = new THREE.Mesh(pathGeo, pathMat);
+        world.add(pathMesh);
+
+        // A marker at each doorstep, shown once the line has reached it.
+        const stops = [pathPoints[0], pathPoints[3], pathPoints[pathPoints.length - 1]].map((pt) => {
+            let best = 0, bd = Infinity;
+            for (let i = 0; i <= 400; i++) {
+                const d = curve.getPointAt(i / 400).distanceTo(pt);
+                if (d < bd) { bd = d; best = i / 400; }
+            }
+            const m = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.06, 28), glowMat);
+            m.position.copy(pt).setY(0.17);
+            m.scale.setScalar(0.001);
+            world.add(m);
+            return { mesh: m, at: best };
+        });
+
+        // ---- Scenery: trees and a few small buildings ------------------------------------
+        // Placed with a seeded random so the map is the same every visit, keeping clear of the offices and the path.
+        let seed = 11;
+        const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+        const pathSamples = Array.from({ length: 120 }, (_, i) => curve.getPointAt(i / 119));
+        const clearOf = (x, z, pad) =>
+            Math.abs(x) < 5.7 && Math.abs(z) < 5.7 &&
+            roles.every((r) => !(x > r.bounds.x0 - pad && x < r.bounds.x1 + pad && z > r.bounds.z0 - pad && z < r.bounds.z1 + pad)) &&
+            pathSamples.every((p) => Math.hypot(p.x - x, p.z - z) > 0.55 + pad);
+        const placed = [];
+        const spot = (pad, minGap) => {
+            for (let i = 0; i < 80; i++) {
+                const x = (rand() - 0.5) * 11.4, z = (rand() - 0.5) * 11.4;
+                if (clearOf(x, z, pad) && placed.every((q) => Math.hypot(q[0] - x, q[1] - z) > minGap)) { placed.push([x, z]); return [x, z]; }
+            }
+            return null;
+        };
+
+        const trunkMat = new THREE.MeshStandardMaterial({ color: '#7a5a3a', roughness: 0.9 });
+        const leafMats = ['#3f9d5a', '#58b368', '#2f8a4e'].map((c) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.8 }));
+        const trunkGeo = new THREE.CylinderGeometry(0.05, 0.075, 0.34, 8);
+        const coneGeo = new THREE.ConeGeometry(0.34, 0.62, 9);
+        const ballGeo = new THREE.IcosahedronGeometry(0.34, 1);
+        for (let i = 0; i < 22; i++) {
+            const p = spot(0.1, 0.8); if (!p) continue;
+            const t = new THREE.Group();
+            const k = 0.75 + rand() * 0.6;
+            const trunk = new THREE.Mesh(trunkGeo, trunkMat); trunk.position.y = 0.17;
+            const leaf = new THREE.Mesh(i % 3 ? coneGeo : ballGeo, leafMats[i % 3]);
+            leaf.position.y = i % 3 ? 0.62 : 0.55;
+            if (i % 3) { const top = new THREE.Mesh(coneGeo, leafMats[i % 3]); top.scale.setScalar(0.7); top.position.y = 0.98; top.castShadow = true; t.add(top); }
+            trunk.castShadow = leaf.castShadow = true;
+            t.add(trunk, leaf);
+            t.scale.setScalar(k);
+            t.position.set(p[0], 0, p[1]);
+            world.add(t);
+        }
+
+        // Small neighbouring buildings: a café, a shop, a bike shed and so on.
+        const smallRoofs = ['#d9a441', '#6fa8c9', '#c9786b', '#8cb369', '#b79ac9'].map((c) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.6 }));
+        [[1.0, 0.85, 0.7], [0.8, 0.8, 0.55], [1.2, 0.7, 0.6], [0.7, 0.7, 0.8], [0.9, 1.0, 0.55], [1.1, 0.75, 0.65]].forEach(([w, d, h], i) => {
+            const p = spot(0.5, 1.5); if (!p) return;
+            const sb = new THREE.Group();
+            const body = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 2, 0.07), towerMat);
+            body.position.y = h / 2;
+            const roof = new THREE.Mesh(new RoundedBoxGeometry(w + 0.1, 0.1, d + 0.1, 2, 0.04), smallRoofs[i % smallRoofs.length]);
+            roof.position.y = h + 0.05;
+            body.castShadow = body.receiveShadow = roof.castShadow = true;
+            sb.add(body, roof);
+            sb.position.set(p[0], 0, p[1]);
+            sb.rotation.y = (i % 2) * 0.12;
+            world.add(sb);
+        });
 
         const orbMat = new THREE.MeshStandardMaterial({ emissiveIntensity: 2.2 });
-        const orb = new THREE.Mesh(new THREE.SphereGeometry(0.22, 24, 24), orbMat);
-        const orbLight = new THREE.PointLight(0xffffff, 6, 5, 2);
+        const orb = new THREE.Mesh(new THREE.SphereGeometry(0.2, 24, 24), orbMat);
+        const orbLight = new THREE.PointLight(0xffffff, 5, 4.5, 2);
         orb.add(orbLight);
+        orb.visible = false;
         world.add(orb);
 
-        // Floating particles
-        const pCount = 140;
-        const pPos = new Float32Array(pCount * 3);
-        for (let i = 0; i < pCount; i++) {
-            pPos[i * 3] = (rand() - 0.5) * 18;
-            pPos[i * 3 + 1] = rand() * 9;
-            pPos[i * 3 + 2] = (rand() - 0.5) * 18;
-        }
-        const pGeo = new THREE.BufferGeometry();
-        pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-        const pMat = new THREE.PointsMaterial({ size: 0.06, transparent: true, opacity: 0.7 });
-        const particles = new THREE.Points(pGeo, pMat);
-        world.add(particles);
-
         function applyColors() {
-            const accent = new THREE.Color(css('--accent') || '#7c5cff');
-            const accent2 = new THREE.Color(css('--accent-2') || '#22d3ee');
+            const accent = new THREE.Color(css('--accent') || '#f43f5e');
+            const accent2 = new THREE.Color(css('--accent-2') || '#f59e0b');
             platformMat.color.set(css('--platform'));
-            blockMat.color.set(css('--block'));
+            plotMat.color.set(css('--block'));
             towerMat.color.set(css('--tower'));
             glowMat.color.copy(accent); glowMat.emissive.copy(accent);
-            windowMat.color.copy(accent2); windowMat.emissive.copy(accent2);
             pathMat.color.copy(accent); pathMat.emissive.copy(accent);
             orbMat.color.set(0xffffff); orbMat.emissive.copy(accent2);
             orbLight.color.copy(accent2);
-            pMat.color.copy(accent);
             hotspots.forEach((h) => (h.style.borderColor = ''));
         }
 
-        // HTML hotspots pinned to tower tops
+        // HTML hotspots pinned above each office
         const hotspots = roles.map((r) => {
             const b = document.createElement('button');
             b.className = 'hotspot';
+            b.style.setProperty('--brand', r.brand);
             b.innerHTML = '<span class="dot">●</span><span></span><span class="yr"></span>';
             b.children[1].textContent = r.name;
             b.children[2].textContent = r.year;
@@ -876,7 +1148,7 @@
         applyColors();
         window.addEventListener('tokenschange', applyColors);
 
-        // Interaction: drag to orbit, hover/click towers
+        // Interaction: drag to orbit, hover/click offices
         const BASE_ANGLE = (3 * Math.PI) / 4 - 0.45;
         let angle = BASE_ANGLE, targetAngle = angle, dragging = false, dragStartX = 0, dragStartAngle = 0, moved = false;
         let hovered = null;
@@ -922,7 +1194,9 @@
 
         const clock = new THREE.Clock();
         const tmp = new THREE.Vector3();
-        let orbT = 0;
+        let orbT = 0, drawT = 0, started = false;
+        const DRAW_SECONDS = 3.2;
+        const ease = (t) => 1 - Math.pow(1 - t, 3);
         function frame() {
             requestAnimationFrame(frame);
             if (!visible) return;
@@ -934,14 +1208,24 @@
             angle += (targetAngle - angle) * 0.08;
             const a = angle + (still ? 0 : mouse.x * 0.15 + Math.sin(t * 0.25) * 0.25);
             camera.position.set(Math.cos(a) * CAM_RADIUS, CAM_HEIGHT + mouse.y * 1.5 + scrollTilt * 6, Math.sin(a) * CAM_RADIUS);
-            camera.lookAt(0, 2 - scrollTilt * 1.5, 0);
+            camera.lookAt(0, 0.9 - scrollTilt * 1, 0.4);
 
-            world.position.y = still ? 0 : Math.sin(t * 0.8) * 0.15;
-            if (!still) {
-                orbT = (orbT + dt * 0.06) % 1;
-                particles.rotation.y += dt * 0.02;
+            world.position.y = still ? 0 : Math.sin(t * 0.8) * 0.12;
+
+            // The path draws itself from Google to Wells Fargo, then a spark keeps travelling it.
+            if (!started) { started = true; drawT = still ? 1 : 0; }
+            if (drawT < 1) drawT = Math.min(1, drawT + dt / DRAW_SECONDS);
+            const drawn = ease(drawT);
+            pathGeo.setDrawRange(0, Math.floor((drawn * TUBULAR)) * RADIAL * 6);
+            stops.forEach((s) => {
+                const k = drawn >= s.at ? Math.min(1, (drawn - s.at) / 0.06 + (s.at === 0 ? 1 : 0)) : 0;
+                s.mesh.scale.setScalar(Math.max(0.001, k));
+            });
+            if (drawT >= 1) {
+                orb.visible = true;
+                if (!still) orbT = (orbT + dt * 0.07) % 1;
+                orb.position.copy(curve.getPointAt(orbT)).add(tmp.set(0, 0.32, 0));
             }
-            orb.position.copy(curve.getPointAt(orbT)).add(tmp.set(0, 0.35, 0));
 
             roles.forEach((r) => {
                 const s = hovered === r ? 1.06 : 1;
@@ -957,6 +1241,22 @@
             renderer.render(scene, camera);
         }
         frame();
+    </script>
+    <script>
+        // The Catch Me preview's eyes follow your cursor.
+        (function () {
+            var art = document.querySelector('.art-catch');
+            if (!art) return;
+            var pupils = art.querySelectorAll('.cm-eye i');
+            document.addEventListener('pointermove', function (e) {
+                var r = art.getBoundingClientRect();
+                if (r.bottom < 0 || r.top > innerHeight) return;
+                var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+                var a = Math.atan2(e.clientY - cy, e.clientX - cx);
+                var d = Math.min(3.5, Math.hypot(e.clientX - cx, e.clientY - cy) / 60);
+                pupils.forEach(function (p) { p.style.transform = 'translate(' + Math.cos(a) * d + 'px,' + Math.sin(a) * d + 'px)'; });
+            });
+        })();
     </script>
 </body>
 </html>
