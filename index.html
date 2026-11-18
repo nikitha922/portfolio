@@ -253,7 +253,7 @@
 
 
         /* Personal projects */
-        .projects { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; }
+        .projects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; }
         .project { display: flex; flex-direction: column; overflow: hidden; transition: transform .3s, border-color .3s, box-shadow .3s; }
         .project:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 24px 50px -24px color-mix(in srgb, var(--accent) 60%, transparent); }
         .project-art { position: relative; height: 190px; overflow: hidden; border-bottom: 1px solid var(--border); display: grid; place-items: center; }
@@ -282,6 +282,19 @@
         .art-money .draw { stroke-dasharray: 420; stroke-dashoffset: 0; transition: stroke-dashoffset 1.2s ease; }
         .project:hover .art-money .draw { animation: draw 1.2s ease; }
         @keyframes draw { from { stroke-dashoffset: 420; } to { stroke-dashoffset: 0; } }
+
+        /* Garage Drive preview */
+        .art-garage { background: linear-gradient(#262a31 0 62%, #3a3f47 62%); }
+        .art-garage::before { content: ''; position: absolute; inset: 0 0 38% 0; background: repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 2px, transparent 2px 46px), repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 2px, transparent 2px 22px); }
+        .art-garage::after { content: ''; position: absolute; left: 12%; right: 12%; top: 8%; height: 5px; border-radius: 3px; background: #fff8e8; box-shadow: 0 0 28px 8px rgba(255,244,214,.45); }
+        .art-garage svg { position: relative; z-index: 1; width: 62%; height: auto; overflow: visible; margin-top: 18px; }
+        .art-garage .gd-car { transition: transform .9s cubic-bezier(.3,.8,.3,1); }
+        .art-garage .gd-wheel { transform-box: fill-box; transform-origin: center; }
+        .project:hover .art-garage .gd-car { transform: translateX(26px); }
+        .project:hover .art-garage .gd-wheel { animation: gdspin .6s linear infinite; }
+        .art-garage .gd-beam { opacity: .35; transition: opacity .4s; }
+        .project:hover .art-garage .gd-beam { opacity: .9; }
+        @keyframes gdspin { to { transform: rotate(360deg); } }
 
         /* Catch Me preview */
         .art-catch { background: #0e1013; }
@@ -345,7 +358,7 @@
         .reveal.in { opacity: 1; transform: none; }
         [data-motion="off"] *, [data-motion="off"] *::before { animation: none !important; transition: none !important; }
         [data-motion="off"] .reveal { opacity: 1; transform: none; }
-        [data-motion="off"] .project:hover .cm-pill, [data-motion="off"] .project:hover .art-money .draw { animation: none !important; }
+        [data-motion="off"] .project:hover .cm-pill, [data-motion="off"] .project:hover .art-money .draw, [data-motion="off"] .project:hover .art-garage .gd-wheel { animation: none !important; }
         @media (prefers-reduced-motion: reduce) {
             html { scroll-behavior: auto; }
             .reveal { opacity: 1; transform: none; }
@@ -519,7 +532,7 @@
                         <div class="tag">$ ls ~/personal-projects</div>
                         <h2>Personal projects</h2>
                     </div>
-                    <p>Things I build on my own time to try ideas out: a to-do app, a finance dashboard and a button that refuses to be clicked.</p>
+                    <p>Things I build on my own time to try ideas out: a to-do app, a finance dashboard, a button that refuses to be clicked and a 3D garage you can drive around.</p>
                 </div>
                 <div class="projects">
                     <article class="card project reveal" id="project-taskly">
@@ -579,6 +592,33 @@
                             <div class="project-links">
                                 <a class="btn btn-primary" href="https://nikitha922.github.io/catch-me/" target="_blank" rel="noopener noreferrer">Try it ↗</a>
                                 <a class="btn" href="https://github.com/nikitha922/catch-me" target="_blank" rel="noopener noreferrer">Source ↗</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card project reveal" id="project-garage-drive">
+                        <div class="project-art art-garage" aria-hidden="true">
+                            <svg viewBox="0 0 240 100">
+                                <g class="gd-car">
+                                    <ellipse cx="120" cy="88" rx="86" ry="6" fill="#000" opacity=".35"/>
+                                    <path class="gd-beam" d="M196 62 L238 50 L238 76 Z" fill="#fff4cf"/>
+                                    <path d="M30 70 C30 58 40 54 56 52 L84 32 C88 29 92 28 98 28 L142 28 C150 28 156 31 162 37 L178 52 C192 54 198 58 198 68 L198 74 L30 74 Z" fill="#d62828"/>
+                                    <path d="M92 36 L140 36 C145 36 148 38 152 42 L164 52 L82 52 Z" fill="#12171d"/>
+                                    <path d="M118 36 V52" stroke="#d62828" stroke-width="3"/>
+                                    <rect x="188" y="58" width="9" height="5" rx="2" fill="#fff4cf"/>
+                                    <rect x="30" y="60" width="7" height="5" rx="2" fill="#ff4d5e"/>
+                                    <g class="gd-wheel"><circle cx="66" cy="74" r="14" fill="#15161a"/><circle cx="66" cy="74" r="8" fill="#c9ced6"/><path d="M66 66v16M58 74h16" stroke="#7d838d" stroke-width="2"/></g>
+                                    <g class="gd-wheel"><circle cx="160" cy="74" r="14" fill="#15161a"/><circle cx="160" cy="74" r="8" fill="#c9ced6"/><path d="M160 66v16M152 74h16" stroke="#7d838d" stroke-width="2"/></g>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="project-body">
+                            <h3>Garage Drive</h3>
+                            <p>A 3D garage you can drive around with the keyboard. Drift physics, tyre smoke, a reflective floor, engine sound, and a driver who steps out of the car and walks around.</p>
+                            <div class="project-tags"><span>Three.js</span><span>TypeScript</span><span>WebGL</span><span>Vite</span></div>
+                            <div class="project-links">
+                                <a class="btn btn-primary" href="https://nikitha922.github.io/garage-drive/" target="_blank" rel="noopener noreferrer">Play it ↗</a>
+                                <a class="btn" href="https://github.com/nikitha922/garage-drive" target="_blank" rel="noopener noreferrer">Source ↗</a>
                             </div>
                         </div>
                     </article>
@@ -812,6 +852,7 @@
                 { label: 'Open Taskly (to-do app)', hint: 'project ↗', run: function () { window.open('https://nikitha922.github.io/todo-app/', '_blank', 'noopener'); } },
                 { label: 'Open Money Trail (finance dashboard)', hint: 'project ↗', run: function () { window.open('https://nikitha922.github.io/money-trail/', '_blank', 'noopener'); } },
                 { label: 'Open Catch Me (the button game)', hint: 'project ↗', run: function () { window.open('https://nikitha922.github.io/catch-me/', '_blank', 'noopener'); } },
+                { label: 'Open Garage Drive (3D driving game)', hint: 'project ↗', run: function () { window.open('https://nikitha922.github.io/garage-drive/', '_blank', 'noopener'); } },
                 { label: 'Toggle light / dark theme', hint: 'action', run: toggleTheme },
                 { label: 'Copy email address', hint: 'action', run: copyEmail },
                 { label: 'Open LinkedIn', hint: 'link ↗', run: function () { window.open('https://www.linkedin.com/in/nikitha-madishetty', '_blank', 'noopener'); } },
